@@ -1,2 +1,2 @@
 # definitive
-A simple program to dictionary style definitions
+A simple program to generate dictionary style definitions.
