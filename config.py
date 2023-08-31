@@ -1,6 +1,11 @@
 from matplotlib import font_manager
 from PIL import Image, ImageDraw, ImageFont
 
+### GENERIC DEFINITIONS ###
+
+E_OK = 0
+E_ERR = 1
+
 ### GEOMETRY DEFINITIONS ###
 
 # the output is comprised of 4 sections:

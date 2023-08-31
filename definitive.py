@@ -1,26 +1,34 @@
+import sys
 import textwrap
+import argparse
 from matplotlib import font_manager
 from PIL import Image, ImageDraw, ImageFont
 
-from config import ( WIDTH, HEIGHT, X_WORD_TO_DEFINE, X_WORD_TYPE, X_WORD_DEFINITION, X_SEE_ALSO,
+from config import ( E_OK, E_ERR, WIDTH, HEIGHT, X_WORD_TO_DEFINE, X_WORD_TYPE, X_WORD_DEFINITION, X_SEE_ALSO,
                      Y_WORD_TO_DEFINE, Y_PADDING, Y_PADDING2, BG_COLOR, FONT_COLOR, WORD_DEFINITION_LINE_WIDTH,
                      FONT_WORD_TO_DEFINE, FONT_WORD_TYPE, FONT_WORD_DEFINITION, WORD_DEFINITION_LINE_SPACING )
 
 
 def main():
 
-    # TODO: parse parameters
+    parser = argparse.ArgumentParser(description='Generate a dictionary entry on a png file.')
+    parser.add_argument( '-w', '--word',        required=True, help='Word to be defined')
+    parser.add_argument( '-c', '--word-class',  required=True, help='Word class, such as noun, adjective, verb, etc')
+    parser.add_argument( '-d', '--definition',  required=True, help='The definition of the word')
+    parser.add_argument( '-s', '--see-also',    required=True, help='Other related words')
+    parser.add_argument( '-o', '--output-file', required=True, help='Other related words')
 
-    word_to_define  = 'entropitis'
-    word_type = 'noun'
-    word_definition = 'A condition defined by the uncontrollable urge to introduce superflous complexity in systems or processes.'
-    see_also = 'autokafka syndrome'
+    args = parser.parse_args()
 
-    output_file = 'result.png'
+    word_to_define  = args.word
+    word_class = args.word_class
+    word_definition = args.definition
+    see_also = args.see_also
+    output_file = args.output_file
 
     ### MAIN SCRIPT ###
 
-    word_type_str = f"({word_type})"
+    word_class_str = f"({word_class})"
     see_also_str = f"(see also: {see_also})"
 
     word_definition_lines = textwrap.wrap(word_definition, width=WORD_DEFINITION_LINE_WIDTH)
@@ -31,14 +39,14 @@ def main():
 
     y_spacing = draw.textsize(word_to_define, font=FONT_WORD_TO_DEFINE)[1] + Y_PADDING
 
-    y_word_type = Y_WORD_TO_DEFINE + y_spacing
+    y_word_class = Y_WORD_TO_DEFINE + y_spacing
 
-    y_spacing2 = draw.textsize(word_type, font=FONT_WORD_TO_DEFINE)[1] + Y_PADDING2
+    y_spacing2 = draw.textsize(word_class, font=FONT_WORD_TO_DEFINE)[1] + Y_PADDING2
 
-    y_word_definition = y_word_type + y_spacing2
+    y_word_definition = y_word_class + y_spacing2
 
     draw.text((X_WORD_TO_DEFINE, Y_WORD_TO_DEFINE), word_to_define, font=FONT_WORD_TO_DEFINE, fill=FONT_COLOR)
-    draw.text((X_WORD_TYPE, y_word_type), word_type_str, font=FONT_WORD_TYPE, fill=FONT_COLOR)
+    draw.text((X_WORD_TYPE, y_word_class), word_class_str, font=FONT_WORD_TYPE, fill=FONT_COLOR)
 
     y_pos = y_word_definition
     for line in word_definition_lines:
