@@ -4,7 +4,7 @@ import argparse
 from matplotlib import font_manager
 from PIL import Image, ImageDraw, ImageFont
 
-from config import ( E_OK, E_ERR, WIDTH, HEIGHT, X_PADDING, Y_PADDING, Y_PADDING2, BG_COLOR, FONT_COLOR,
+from config import ( E_OK, E_ERR, WIDTH, MIN_HEIGHT, LINE_HEIGHT, X_PADDING, Y_PADDING, Y_PADDING2, BG_COLOR, FONT_COLOR,
                      FONT_SIZE_WORD_TO_DEFINE, FONT_SIZE_WORD_TYPE, FONT_SIZE_WORD_DEFINITION,
                      FONT_WORD_TO_DEFINE_BASE, FONT_WORD_TYPE_BASE, FONT_WORD_DEFINITION_BASE,
                      WORD_DEFINITION_LINE_WIDTH, WORD_DEFINITION_LINE_SPACING )
@@ -36,7 +36,6 @@ def main():
     # this scaling_factor parameter allows for fine tuning the resulting image size keeping proportion
 
     width  = round(WIDTH * scaling_factor)
-    height = round(HEIGHT * scaling_factor)
 
     x_padding = round(X_PADDING * scaling_factor)
     y_padding = round(Y_PADDING * scaling_factor)
@@ -71,6 +70,10 @@ def main():
     see_also_str = f"(see also: {see_also})"
 
     word_definition_lines = textwrap.wrap(word_definition, width=word_definition_line_width)
+    nr_lines = len(word_definition_lines)
+
+    # empiric height growth
+    height = (MIN_HEIGHT + LINE_HEIGHT * nr_lines) * scaling_factor
 
     img = Image.new('RGB', (width, height), color=bg_color)
 
@@ -99,7 +102,6 @@ def main():
     try:
         img.save(output_file)
         print(f"Output saved to {output_file}.")
-        print('Crop the bottom of the image to obtain optimal proportions')
     except e:
         print(f"problem saving {output_file}")
 
