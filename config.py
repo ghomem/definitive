@@ -16,6 +16,7 @@ E_ERR = 1
 
 # in principle the remaining constants do not need to be adjusted
 WIDTH  = 890
+HEIGHT = 714
 
 MIN_HEIGHT = 416
 LINE_HEIGHT = 46

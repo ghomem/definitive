@@ -4,7 +4,7 @@ import argparse
 from matplotlib import font_manager
 from PIL import Image, ImageDraw, ImageFont
 
-from config import ( E_OK, E_ERR, WIDTH, MIN_HEIGHT, LINE_HEIGHT, X_PADDING, Y_PADDING, Y_PADDING2, BG_COLOR, FONT_COLOR,
+from config import ( E_OK, E_ERR, WIDTH, HEIGHT, MIN_HEIGHT, LINE_HEIGHT, X_PADDING, Y_PADDING, Y_PADDING2, BG_COLOR, FONT_COLOR,
                      FONT_SIZE_WORD_TO_DEFINE, FONT_SIZE_WORD_TYPE, FONT_SIZE_WORD_DEFINITION,
                      FONT_WORD_TO_DEFINE_BASE, FONT_WORD_TYPE_BASE, FONT_WORD_DEFINITION_BASE,
                      WORD_DEFINITION_LINE_WIDTH, WORD_DEFINITION_LINE_SPACING )
@@ -13,14 +13,15 @@ from config import ( E_OK, E_ERR, WIDTH, MIN_HEIGHT, LINE_HEIGHT, X_PADDING, Y_P
 def main():
 
     parser = argparse.ArgumentParser(description='Generate a dictionary entry on a png file.')
-    parser.add_argument( '-w', '--word',             required=True,  help='Word to be defined')
-    parser.add_argument( '-c', '--word-class',       required=True,  help='Word class, such as noun, adjective, verb, etc')
-    parser.add_argument( '-d', '--definition',       required=True,  help='The definition of the word')
-    parser.add_argument( '-s', '--see-also',         required=True,  help='Other related words')
-    parser.add_argument( '-o', '--output-file',      required=True,  help='Other related words')
-    parser.add_argument( '-f', '--scaling-factor',   required=False, help='Scaling factor for the generated image', type=int, default=1)
-    parser.add_argument( '-fc', '--font-color',      required=False, help='The color used for the text', default=FONT_COLOR)
+    parser.add_argument( '-w', '--word',              required=True,  help='Word to be defined')
+    parser.add_argument( '-c', '--word-class',        required=True,  help='Word class, such as noun, adjective, verb, etc')
+    parser.add_argument( '-d', '--definition',        required=True,  help='The definition of the word')
+    parser.add_argument( '-s', '--see-also',          required=True,  help='Other related words')
+    parser.add_argument( '-o', '--output-file',       required=True,  help='Other related words')
+    parser.add_argument( '-f', '--scaling-factor',    required=False, help='Scaling factor for the generated image', type=int, default=1)
+    parser.add_argument( '-fc', '--font-color',       required=False, help='The color used for the text', default=FONT_COLOR)
     parser.add_argument( '-bc', '--background-color', required=False, help='The color used for the backgrouns', default=BG_COLOR)
+    parser.add_argument( '-dh', '--dynamic-height',   required=False, help='Whether the image height is fixed or dynamic', action='store_true')
 
     args = parser.parse_args()
 
@@ -32,6 +33,7 @@ def main():
     scaling_factor = args.scaling_factor
     font_color = args.font_color
     bg_color = args.background_color
+    dynamic_height = args.dynamic_height
 
     # this scaling_factor parameter allows for fine tuning the resulting image size keeping proportion
 
@@ -73,7 +75,12 @@ def main():
     nr_lines = len(word_definition_lines)
 
     # empiric height growth
-    height = (MIN_HEIGHT + LINE_HEIGHT * nr_lines) * scaling_factor
+    if dynamic_height:
+        my_height = MIN_HEIGHT + LINE_HEIGHT * nr_lines
+    else:
+        my_height = HEIGHT
+
+    height = my_height * scaling_factor
 
     img = Image.new('RGB', (width, height), color=bg_color)
 
