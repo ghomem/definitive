@@ -47,7 +47,7 @@ def main():
     y_word_to_define = 0 + y_padding
 
     x_word_definition = 0 + x_padding
-    x_word_type = 0 + x_padding
+    x_word_class = 0 + x_padding
 
     x_see_also = 0 + x_padding
 
@@ -58,15 +58,13 @@ def main():
 
     # here we pick the font sizes
     font_size_word_to_define = round(FONT_SIZE_WORD_TO_DEFINE * scaling_factor)
-    font_size_word_type = round(FONT_SIZE_WORD_TYPE * scaling_factor)
+    font_size_word_class = round(FONT_SIZE_WORD_TYPE * scaling_factor)
     font_size_word_definition = round(FONT_SIZE_WORD_DEFINITION * scaling_factor)
 
     # and here we instantiate the fonts
     font_word_to_define = ImageFont.truetype(FONT_WORD_TO_DEFINE_BASE, size=font_size_word_to_define)
-    font_word_type = ImageFont.truetype(FONT_WORD_TYPE_BASE, size=font_size_word_type)
+    font_word_class = ImageFont.truetype(FONT_WORD_TYPE_BASE, size=font_size_word_class)
     font_word_definition = ImageFont.truetype(FONT_WORD_DEFINITION_BASE, size=font_size_word_definition)
-
-    ### MAIN SCRIPT ###
 
     word_class_str = f"({word_class})"
     see_also_str = f"(see also: {see_also})"
@@ -82,6 +80,8 @@ def main():
 
     height = my_height * scaling_factor
 
+    ### MAIN SCRIPT ###
+
     img = Image.new('RGB', (width, height), color=bg_color)
 
     draw = ImageDraw.Draw(img)
@@ -95,7 +95,7 @@ def main():
     y_word_definition = y_word_class + y_spacing2
 
     draw.text((x_word_to_define, y_word_to_define), word_to_define, font=font_word_to_define, fill=font_color)
-    draw.text((x_word_type, y_word_class), word_class_str, font=font_word_type, fill=font_color)
+    draw.text((x_word_class, y_word_class), word_class_str, font=font_word_class, fill=font_color)
 
     y_pos = y_word_definition
     for line in word_definition_lines:
