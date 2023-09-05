@@ -1,5 +1,5 @@
 # definitive
-A simple program to generate dictionary style definitions.
+A simple program to generate dictionary style definitions on a PNG file.
 
 # usage
 
