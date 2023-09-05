@@ -17,10 +17,10 @@ def main():
     parser.add_argument( '-c', '--word-class',        required=True,  help='Word class, such as noun, adjective, verb, etc')
     parser.add_argument( '-d', '--definition',        required=True,  help='The definition of the word')
     parser.add_argument( '-s', '--see-also',          required=True,  help='Other related words')
-    parser.add_argument( '-o', '--output-file',       required=True,  help='Other related words')
+    parser.add_argument( '-o', '--output-file',       required=True,  help='The output file')
     parser.add_argument( '-f', '--scaling-factor',    required=False, help='Scaling factor for the generated image', type=int, default=1)
     parser.add_argument( '-fc', '--font-color',       required=False, help='The color used for the text', default=FONT_COLOR)
-    parser.add_argument( '-bc', '--background-color', required=False, help='The color used for the backgrouns', default=BG_COLOR)
+    parser.add_argument( '-bc', '--background-color', required=False, help='The color used for the background', default=BG_COLOR)
     parser.add_argument( '-dh', '--dynamic-height',   required=False, help='Whether the image height is fixed or dynamic', action='store_true')
 
     args = parser.parse_args()
