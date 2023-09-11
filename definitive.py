@@ -5,8 +5,8 @@ from matplotlib import font_manager
 from PIL import Image, ImageDraw, ImageFont
 
 from config import (E_OK, E_ERR, WIDTH, HEIGHT, MIN_HEIGHT, LINE_HEIGHT, X_PADDING, Y_PADDING, Y_PADDING2, X_PADDING_AVATAR, AVATAR_WIDTH, BG_COLOR, FONT_COLOR,
-                     FONT_SIZE_WORD_TO_DEFINE, FONT_SIZE_WORD_TYPE, FONT_SIZE_WORD_DEFINITION, FONT_WORD_TO_DEFINE_BASE, FONT_WORD_TYPE_BASE, FONT_WORD_DEFINITION_BASE,
-                     WORD_DEFINITION_LINE_WIDTH, WORD_DEFINITION_LINE_SPACING)
+                    FONT_SIZE_WORD_TO_DEFINE, FONT_SIZE_WORD_TYPE, FONT_SIZE_WORD_DEFINITION, FONT_WORD_TO_DEFINE_BASE, FONT_WORD_TYPE_BASE, FONT_WORD_DEFINITION_BASE,
+                    WORD_DEFINITION_LINE_WIDTH, WORD_DEFINITION_LINE_SPACING)
 
 
 def get_fonts(scaling_factor):
@@ -26,15 +26,15 @@ def get_fonts(scaling_factor):
 
 def get_avatar_img(avatar, scaling_factor):
 
-        if avatar == None:
-            return None
-        else:
-            try:
-                avatar_path = 'in/' + avatar + '.png'
-                avatar_img = Image.open(avatar_path)
-            except Exception:
-                print(f"Error opening avatar image at {avatar_path}.")
-                exit(E_ERR)
+    if avatar is None:
+        return None
+    else:
+        try:
+            avatar_path = 'in/' + avatar + '.png'
+            avatar_img = Image.open(avatar_path)
+        except Exception:
+            print(f"Error opening avatar image at {avatar_path}.")
+            exit(E_ERR)
 
         avatar_width = AVATAR_WIDTH * scaling_factor
 
@@ -79,9 +79,9 @@ def render_image(width, height, font_color, bg_color, x_word_to_define, y_word_t
     draw.text((x_see_also, y_pos), see_also_str, font=font_word_definition, fill=font_color)
 
     # avatar processing, in case it is available
-    if not avatar_img == None:
+    if avatar_img is not None:
         # the y position is lined up with the beggining of the see_also text
-        img.paste(avatar_img, (x_padding_avatar,y_pos))
+        img.paste(avatar_img, (x_padding_avatar, y_pos))
 
     return img
 
@@ -145,7 +145,7 @@ def main():
     word_definition_lines = textwrap.wrap(word_definition, width=word_definition_line_width)
     nr_lines = len(word_definition_lines)
 
-    if not avatar == None:
+    if avatar is not None:
         avatar_img = get_avatar_img(avatar, scaling_factor)
         dummy, avatar_height = avatar_img.size
         # it is lined up with the upper part of see_also, so we want to subtract that from what we add
