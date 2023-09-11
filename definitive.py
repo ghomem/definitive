@@ -4,10 +4,9 @@ import argparse
 from matplotlib import font_manager
 from PIL import Image, ImageDraw, ImageFont
 
-from config import ( E_OK, E_ERR, WIDTH, HEIGHT, MIN_HEIGHT, LINE_HEIGHT, X_PADDING, Y_PADDING, Y_PADDING2, BG_COLOR, FONT_COLOR,
-                     FONT_SIZE_WORD_TO_DEFINE, FONT_SIZE_WORD_TYPE, FONT_SIZE_WORD_DEFINITION,
-                     FONT_WORD_TO_DEFINE_BASE, FONT_WORD_TYPE_BASE, FONT_WORD_DEFINITION_BASE,
-                     WORD_DEFINITION_LINE_WIDTH, WORD_DEFINITION_LINE_SPACING )
+from config import (E_OK, E_ERR, WIDTH, HEIGHT, MIN_HEIGHT, LINE_HEIGHT, X_PADDING, Y_PADDING, Y_PADDING2, X_PADDING_AVATAR, AVATAR_WIDTH, BG_COLOR, FONT_COLOR,
+                     FONT_SIZE_WORD_TO_DEFINE, FONT_SIZE_WORD_TYPE, FONT_SIZE_WORD_DEFINITION, FONT_WORD_TO_DEFINE_BASE, FONT_WORD_TYPE_BASE, FONT_WORD_DEFINITION_BASE,
+                     WORD_DEFINITION_LINE_WIDTH, WORD_DEFINITION_LINE_SPACING)
 
 
 def get_fonts(scaling_factor):
@@ -25,8 +24,32 @@ def get_fonts(scaling_factor):
     return font_word_to_define, font_word_class, font_word_definition
 
 
-def render_image(width, height, font_color, bg_color, x_word_to_define, y_word_to_define, x_word_definition, x_word_class, x_see_also, y_padding, y_padding2,
-                 font_word_to_define, font_word_class, font_word_definition, word_definition_line_spacing, word_to_define, word_class, word_definition_lines, see_also):
+def get_avatar_img(avatar, scaling_factor):
+
+        if avatar == None:
+            return None
+        else:
+            try:
+                avatar_path = 'in/' + avatar + '.png'
+                avatar_img = Image.open(avatar_path)
+            except Exception:
+                print(f"Error opening avatar image at {avatar_path}.")
+                exit(E_ERR)
+
+        avatar_width = AVATAR_WIDTH * scaling_factor
+
+        original_width, original_height = avatar_img.size
+
+        new_width = avatar_width
+        new_height = int(original_height * avatar_width / original_width)
+
+        avatar_img = avatar_img.resize( (new_width, new_height) )
+
+        return avatar_img
+
+
+def render_image(width, height, font_color, bg_color, x_word_to_define, y_word_to_define, x_word_definition, x_word_class, x_see_also, y_padding, y_padding2, x_padding_avatar,
+                 font_word_to_define, font_word_class, font_word_definition, word_definition_line_spacing, word_to_define, word_class, word_definition_lines, see_also, avatar_img):
 
     word_class_str = f"({word_class})"
     see_also_str = f"(see also: {see_also})"
@@ -55,6 +78,11 @@ def render_image(width, height, font_color, bg_color, x_word_to_define, y_word_t
 
     draw.text((x_see_also, y_pos), see_also_str, font=font_word_definition, fill=font_color)
 
+    # avatar processing, in case it is available
+    if not avatar_img == None:
+        # the y position is lined up with the beggining of the see_also text
+        img.paste(avatar_img, (x_padding_avatar,y_pos))
+
     return img
 
 
@@ -70,6 +98,7 @@ def main():
     parser.add_argument( '-fc', '--font-color',       required=False, help='The color used for the text', default=FONT_COLOR)
     parser.add_argument( '-bc', '--background-color', required=False, help='The color used for the background', default=BG_COLOR)
     parser.add_argument( '-dh', '--dynamic-height',   required=False, help='Whether the image height is fixed or dynamic', action='store_true')
+    parser.add_argument( '-a',  '--avatar',           required=False, help='One of the supported avatars', default=None, choices=['grug', 'normand', 'troll'])
 
     args = parser.parse_args()
 
@@ -82,6 +111,7 @@ def main():
     font_color = args.font_color
     bg_color = args.background_color
     dynamic_height = args.dynamic_height
+    avatar = args.avatar
 
     # this scaling_factor parameter allows for fine tuning the resulting image size keeping proportion
 
@@ -99,6 +129,12 @@ def main():
 
     x_see_also = 0 + x_padding
 
+    x_padding_avatar = X_PADDING_AVATAR * scaling_factor
+
+    avatar_img = None
+    avatar_height = 0
+    corrected_avatar_height = 0
+
     word_definition_line_spacing = round(WORD_DEFINITION_LINE_SPACING * scaling_factor)
 
     # we do not scale the line width because we are scaling the characters themselves
@@ -109,16 +145,21 @@ def main():
     word_definition_lines = textwrap.wrap(word_definition, width=word_definition_line_width)
     nr_lines = len(word_definition_lines)
 
+    if not avatar == None:
+        avatar_img = get_avatar_img(avatar, scaling_factor)
+        dummy, avatar_height = avatar_img.size
+        # it is lined up with the upper part of see_also, so we want to subtract that from what we add
+        # note that avatar_height is already scaled
+        corrected_avatar_height = avatar_height - LINE_HEIGHT * scaling_factor
+
     # empiric height growth
     if dynamic_height:
-        my_height = MIN_HEIGHT + LINE_HEIGHT * nr_lines
+        height = (MIN_HEIGHT + LINE_HEIGHT * nr_lines) * scaling_factor + corrected_avatar_height
     else:
-        my_height = HEIGHT
+        height = HEIGHT * scaling_factor
 
-    height = my_height * scaling_factor
-
-    img = render_image(width, height, font_color, bg_color, x_word_to_define, y_word_to_define, x_word_definition, x_word_class, x_see_also, y_padding, y_padding2,
-                       font_word_to_define, font_word_class, font_word_definition, word_definition_line_spacing, word_to_define, word_class, word_definition_lines, see_also)
+    img = render_image(width, height, font_color, bg_color, x_word_to_define, y_word_to_define, x_word_definition, x_word_class, x_see_also, y_padding, y_padding2, x_padding_avatar,
+                       font_word_to_define, font_word_class, font_word_definition, word_definition_line_spacing, word_to_define, word_class, word_definition_lines, see_also, avatar_img)
 
     try:
         img.save(output_file)
