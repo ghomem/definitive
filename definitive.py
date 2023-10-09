@@ -98,7 +98,7 @@ def main():
     parser.add_argument( '-fc', '--font-color',       required=False, help='The color used for the text', default=FONT_COLOR)
     parser.add_argument( '-bc', '--background-color', required=False, help='The color used for the background', default=BG_COLOR)
     parser.add_argument( '-dh', '--dynamic-height',   required=False, help='Whether the image height is fixed or dynamic', action='store_true')
-    parser.add_argument( '-a',  '--avatar',           required=False, help='One of the supported avatars', default=None, choices=['grug', 'normand', 'troll'])
+    parser.add_argument( '-a',  '--avatar',           required=False, help='One of the supported avatars', default=None, choices=['grug', 'normand', 'troll', 'lasers', 'lulz'])
 
     args = parser.parse_args()
 
