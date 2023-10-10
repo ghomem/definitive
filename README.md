@@ -19,3 +19,6 @@ To inspect the self-explanatory command line options we can simply run:
 ```
 python3 definitive.py -h
 ```
+If the text is not fitting the canvas please make sure there are not font caching issues by removing:
+* /home/YOURUSER/.config/matplotlib/
+* /home/YOURUSER/.cache/matplotlib/
