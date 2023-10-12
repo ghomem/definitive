@@ -61,3 +61,5 @@ FONT_WORD_DEFINITION_BASE = font_manager.findfont(FONT_WORD_DEFINITION_PROPS)
 FONT_SIZE_WORD_TO_DEFINE = 100
 FONT_SIZE_WORD_TYPE = 60
 FONT_SIZE_WORD_DEFINITION = 36
+
+AVATAR_LIST = ['none', 'grug', 'normand', 'troll', 'lasers', 'lulz', 'randall', 'homer', 'minister']

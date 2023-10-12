@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 from config import (E_OK, E_ERR, WIDTH, HEIGHT, MIN_HEIGHT, LINE_HEIGHT, X_PADDING, Y_PADDING, Y_PADDING2, X_PADDING_AVATAR, AVATAR_WIDTH, BG_COLOR, FONT_COLOR,
                     FONT_SIZE_WORD_TO_DEFINE, FONT_SIZE_WORD_TYPE, FONT_SIZE_WORD_DEFINITION, FONT_WORD_TO_DEFINE_BASE, FONT_WORD_TYPE_BASE, FONT_WORD_DEFINITION_BASE,
-                    WORD_DEFINITION_LINE_WIDTH, WORD_DEFINITION_LINE_SPACING)
+                    WORD_DEFINITION_LINE_WIDTH, WORD_DEFINITION_LINE_SPACING, AVATAR_LIST)
 
 
 def get_fonts(scaling_factor):
@@ -98,7 +98,7 @@ def main():
     parser.add_argument( '-fc', '--font-color',       required=False, help='The color used for the text', default=FONT_COLOR)
     parser.add_argument( '-bc', '--background-color', required=False, help='The color used for the background', default=BG_COLOR)
     parser.add_argument( '-dh', '--dynamic-height',   required=False, help='Whether the image height is fixed or dynamic', action='store_true')
-    parser.add_argument( '-a',  '--avatar',           required=False, help='One of the supported avatars', default=None, choices=['grug', 'normand', 'troll', 'lasers', 'lulz', 'randall'])
+    parser.add_argument( '-a',  '--avatar',           required=False, help='One of the supported avatars', default=None, choices=AVATAR_LIST)
 
     args = parser.parse_args()
 
