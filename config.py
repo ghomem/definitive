@@ -62,4 +62,4 @@ FONT_SIZE_WORD_TO_DEFINE = 100
 FONT_SIZE_WORD_TYPE = 60
 FONT_SIZE_WORD_DEFINITION = 36
 
-AVATAR_LIST = ['none', 'grug', 'normand', 'troll', 'lasers', 'lulz', 'randall', 'homer', 'minister']
+AVATAR_LIST = ['none', 'grug', 'normand', 'troll', 'lasers', 'lulz', 'randall', 'homer', 'minister', 'teller', 'albert', 'murphy']
